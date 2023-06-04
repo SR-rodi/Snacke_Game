@@ -1,4 +1,4 @@
-package ru.sr.snacke
+package ru.sr.snacke.game.view
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,18 +7,23 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
+import ru.sr.snacke.R
+import ru.sr.snacke.game.data.Cell
+import ru.sr.snacke.game.util.iterate
 import kotlin.math.min
 
-class FieldView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    View(context, attrs) {
+class FieldView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null,
+) : View(context, attrs) {
 
     private var rows: Int = DEFAULT_ROWS
     private var columns: Int = DEFAULT_COLUMNS
-    private var cellSize: Int = 0
     private var cellColorOne = Color.BLUE
     private var cellColorTwo = Color.GRAY
+
     private var gameField: Array<Array<Cell>> = Array(columns) { Array(rows) { Cell() } }
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
+    private var cellSize: Int = 0
 
     init {
         initAttrs(attrs)
@@ -30,8 +35,6 @@ class FieldView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
         cellColorOne = typedArray.getColor(R.styleable.FieldView_field_color_one, Color.BLUE)
         cellColorTwo = typedArray.getColor(R.styleable.FieldView_field_color_two, Color.GRAY)
-        rows = typedArray.getInt(R.styleable.FieldView_field_rows, DEFAULT_ROWS)
-        columns = typedArray.getInt(R.styleable.FieldView_field_columns, DEFAULT_COLUMNS)
 
         typedArray.recycle()
     }
@@ -42,11 +45,11 @@ class FieldView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         cellSize = min(w / rows, h / columns)
         val paddingHorizontal = (w - (cellSize * rows)) / 2
         val paddingVertical = (h - (cellSize * columns)) / 2
-        setCells(cellSize, paddingHorizontal,paddingVertical)
+        setCells(cellSize, paddingHorizontal, paddingVertical)
     }
 
     private fun setCells(cellSize: Int, paddingHorizontal: Int, paddingVertical: Int) {
-        gameField.iterate { _, row, column ->
+        gameField.iterate { row, column ->
 
             val checkColor = if (row % 2 == 0) column % 2 == 0 else column % 2 != 0
 
@@ -56,7 +59,6 @@ class FieldView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
             val left = (cellSize * column) + paddingHorizontal
             val top = (cellSize * row) + paddingVertical
-
 
             gameField[row][column] = gameField[row][column].copy(
                 rect = Rect(
@@ -68,26 +70,14 @@ class FieldView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        gameField.iterate { cell, _, _ ->
+        gameField.iterate { cell ->
             paint.color = cell.color
             canvas?.drawRect(cell.rect, paint)
         }
     }
 
     private companion object {
-        const val DEFAULT_ROWS = 18
+        const val DEFAULT_ROWS = 11
         const val DEFAULT_COLUMNS = 21
     }
 }
-
-data class Cell(
-    val color: Int = Color.BLUE,
-    val rect: Rect = Rect(),
-)
-
-fun Array<Array<Cell>>.iterate(action: (Cell, Int, Int) -> Unit) =
-    this.forEachIndexed { row, cells ->
-        cells.forEachIndexed { column, cell ->
-            action(cell, row, column)
-        }
-    }
