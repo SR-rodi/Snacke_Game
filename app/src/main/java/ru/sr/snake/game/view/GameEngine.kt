@@ -2,6 +2,7 @@ package ru.sr.snake.game.view
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.util.Log
 import android.view.SurfaceHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,8 +59,7 @@ class GameEngine(
                     renderSnake(canvas, paintSnake)
                     snake = snake.move(rows, columns, routeSnake)
                 }
-                delay(250)
-                changeRoute(RouteSnake.LEFT)
+                delay(150)
             }
         }
     }

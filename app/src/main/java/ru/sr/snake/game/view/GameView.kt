@@ -4,8 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.SurfaceView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.sr.snake.R
+import ru.sr.snake.game.data.RouteSnake
 import kotlin.math.min
 
 class GameView @JvmOverloads constructor(
@@ -18,7 +24,20 @@ class GameView @JvmOverloads constructor(
     private var cellColorTwo = Color.GRAY
     private var backgroundColor = Color.WHITE
     private var snakeColor = Color.CYAN
-    private val snakeSize = 3
+    private val snakeSize = 6
+    private val touchEventListener = TouchEventListener()
+    private var holderCallback = SnakeHolderCallback(
+        rows = rows,
+        columns = columns,
+        cellSize = 0,
+        snakeSize = snakeSize,
+        backgroundColor = backgroundColor,
+        cellColorTwo = cellColorTwo,
+        cellColorOne = cellColorOne,
+        paddingHorizontal = 0,
+        paddingVertical = 0,
+        snakeColor = snakeColor
+    )
 
     init {
         initAttrs(attrs)
@@ -38,8 +57,17 @@ class GameView @JvmOverloads constructor(
         typedArray.recycle()
     }
 
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        event ?: return false
+        val routeSnake = touchEventListener.getRouteEvent(event)
+        if(routeSnake!=null) holderCallback.onChangeRouteSnake(routeSnake)
+        return true
+
+    }
+
     private fun initHolder(cellSize: Int, paddingHorizontal: Int, paddingVertical: Int) {
-        val callback = SnakeHolderCallback(
+        holderCallback = SnakeHolderCallback(
             rows = rows,
             columns = columns,
             cellSize = cellSize,
@@ -51,7 +79,7 @@ class GameView @JvmOverloads constructor(
             paddingVertical = paddingVertical,
             snakeColor = snakeColor
         )
-        holder.addCallback(callback)
+        holder.addCallback(holderCallback)
 
     }
 

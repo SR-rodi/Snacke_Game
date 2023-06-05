@@ -3,6 +3,7 @@ package ru.sr.snake.game.view
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.SurfaceHolder
+import ru.sr.snake.game.data.RouteSnake
 
 class SnakeHolderCallback(
     rows: Int,
@@ -42,12 +43,16 @@ class SnakeHolderCallback(
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        gameEngine.renderGame(holder,paintSnake,paintField,backgroundColor)
+        gameEngine.renderGame(holder, paintSnake, paintField, backgroundColor)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) = Unit
 
     override fun surfaceDestroyed(holder: SurfaceHolder) = Unit
+
+    fun onChangeRouteSnake(routeSnake: RouteSnake) {
+        gameEngine.changeRoute(routeSnake)
+    }
 
 }
 
