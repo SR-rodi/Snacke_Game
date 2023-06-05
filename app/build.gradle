@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'ru.sr.snacke'
+    namespace 'ru.sr.snake'
     compileSdk 33
 
     defaultConfig {
-        applicationId "ru.sr.snacke"
+        applicationId "ru.sr.snake"
         minSdk 26
         targetSdk 33
         versionCode 1

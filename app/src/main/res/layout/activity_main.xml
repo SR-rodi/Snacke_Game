@@ -6,8 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ru.sr.snacke.game.view.FieldView
+    <ru.sr.snake.game.view.GameView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:field_color_background="@color/green"
+
+        />
 
 </FrameLayout>

@@ -1,4 +1,4 @@
-package ru.sr.snacke.game.data
+package ru.sr.snake.game.data
 
 import android.graphics.Color
 import android.graphics.Rect

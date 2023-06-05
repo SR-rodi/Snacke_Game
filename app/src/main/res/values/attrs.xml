@@ -4,6 +4,8 @@
     <declare-styleable name="FieldView">
         <attr name="field_color_one" format="color"/>
         <attr name="field_color_two" format="color"/>
+        <attr name="field_color_background" format="color"/>
+        <attr name="field_color_snake" format="color"/>
 
     </declare-styleable>
 
